@@ -23,6 +23,8 @@
     "grunt-hashres": "~0.4.1",
     "grunt-processhtml": "~0.3.0",
     "grunt-replace": "~0.7.7",
+    "grunt-tinypng": "^0.5.3",
+    "load-grunt-tasks": "^3.1.0",
     "mockjs": "^0.1.4"
   },
   "engines": {
