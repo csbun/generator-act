@@ -1,6 +1,9 @@
 module.exports = function (grunt) {
     'use strict';
 
+    //自动load所有的task
+    require('load-grunt-tasks')(grunt);
+
     var devConfig = grunt.file.readJSON('conf/dev.json'),
         initConfig = {
             pkg: grunt.file.readJSON('package.json'),
@@ -149,6 +152,24 @@ module.exports = function (grunt) {
                     }]
                 }
             },
+            //在线压缩图片，dev.json中默认关闭此task，建议在ui图确认后开启该task，之后无须关闭。
+            //注意:每个apkKey一个月只能免费压缩500张图片，如果用完了，请转到https://tinypng.com/developers申请新的apiKey
+            tinypng: {
+                options: {
+                    apiKey: devConfig.tinypng.apiKey,
+                    checkSigs: true,
+                    sigFile: 'config/.tinypng_file_compressed',
+                    summarize: true,
+                    showProgress: true,
+                    stopOnImageError: true
+                },
+                compress: {
+                    expand: true, 
+                    cwd: 'public/images/',
+                    src: ['*.png', '*.jpg'],
+                    dest: 'public/images/'
+                }
+            },
             // 图片文件变化
             'file_modified': {
                 images: {
@@ -199,23 +220,10 @@ module.exports = function (grunt) {
         'file_modified'
     ]);
 
-    grunt.initConfig(initConfig);
+    // 初始化dev.json中配置的task，比如tinypng是否要加入到task中
+    initTask();
 
-    grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-contrib-cssmin');
-    grunt.loadNpmTasks('grunt-contrib-clean');
-    grunt.loadNpmTasks('grunt-bower');
-    grunt.loadNpmTasks('grunt-cmd');
-    grunt.loadNpmTasks('grunt-replace');
-    grunt.loadNpmTasks('grunt-processhtml');
-    grunt.loadNpmTasks('grunt-hashres');
-    grunt.loadNpmTasks('grunt-banner');
-    grunt.loadNpmTasks('grunt-express-server');
-    grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-contrib-imagemin');
-    grunt.loadNpmTasks('grunt-file-modified');
-    grunt.loadNpmTasks('grunt-browser-sync');
+    grunt.initConfig(initConfig);
 
     // 发布任务
     grunt.registerTask('default', defaultTask);
@@ -255,6 +263,22 @@ module.exports = function (grunt) {
                 }
             });
             devConfig.views = devConfig.views.concat(langViews);
+        }
+    }
+
+    //初始化dev.json中配置的task，比如tinypng是否要加入到task中
+    function initTask(){
+        var n = defaultTask.length,
+            i, 
+            j = -1;
+        if(devConfig.tinypng.enable){
+            for(i = 0; i < n; i++){
+                if(defaultTask[i].indexOf('imagemin')>-1){
+                    j = i+1;
+                    break;
+                }
+            }
+            defaultTask.splice(j, 0, 'tinypng');
         }
     }
 

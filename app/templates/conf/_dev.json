@@ -12,6 +12,10 @@
         "enable": true,
         "projectId": 1
     },
+    "tinypng": {
+        "enable": false,
+        "apiKey": "Oj3e9V0pJymoyt1jY482tqd1J-73OqIc"
+    },
     "views": [
         {
             "html": "index",
