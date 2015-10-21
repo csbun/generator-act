@@ -1,46 +1,14 @@
 'use strict';
 
-const koa = require('koa');
-const mount = require('koa-mount');
-const regexpRouter = require('koa-regexp-router');
+var path = require('path');
+var express = require('express');
 
-const taskView = require('../tasks/view');
+var BASE_DIR = path.join(__dirname, '..');
+var PORT = process.env.PORT || 5000;
 
-/**
- * Initialize application
- */
-let app = koa();
+var app = express();
+app.use(express.static(BASE_DIR, {}));
 
-/**
- * page
- */
-const REG_PAGE = /^\/([\w\-]+)\/index$/;
-app.use(regexpRouter(REG_PAGE, function * (reqPath, viewName) {
-    this.body = yield taskView.render(viewName);
-}));
-
-/**
- * js
- */
-const REG_PAGE_JS = /^\/([\w\-]+)\/(\w+)\.js$/;
-app.use(regexpRouter(REG_PAGE_JS, function * (reqPath, viewName) {
-    this.body = yield taskView.js(viewName);
-}));
-
-/**
- * css
- */
-const REG_PAGE_CSS = /^\/([\w\-]+)\/(\w+)\.css$/;
-app.use(regexpRouter(REG_PAGE_CSS, function * (reqPath, viewName) {
-    this.type = 'text/css';
-    this.body = yield taskView.css(viewName);
-}));
-
-
-// 启动服务
-let server = koa();
-const mountPath = '/test';
-const port = 3000;
-server.use(mount(mountPath, app));
-server.listen(port);
-console.log('Running at: http://localhost:%d', port);
+app.listen(PORT, function () {
+    console.log('Express server listening on port %d', PORT);
+});

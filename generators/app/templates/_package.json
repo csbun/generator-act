@@ -8,15 +8,19 @@
   "scripts": {
     "start": "DEBUG=true node server/app.js"
   },
+  "keywords": [
+    "activity",
+    "generator"
+  ],
+  "author": {
+    "name": "<%= gitName %>",
+    "email": "<%= gitEmail %>"
+  },
   "dependencies": {
-    "koa": "^1.0.0",
-    "koa-mount": "^1.3.0",
-    "koa-regexp-router": "^0.0.1"
   },
   "devDependencies": {
     "browserify": "^11.2.0",
-    "node-sass": "^3.3.3",
-    "spark-md5": "^1.0.0",
-    "uglify-js": "^2.4.24"
+    "deasync": "^0.1.3",
+    "express": "^4.13.3"
   }
 }

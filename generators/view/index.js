@@ -18,9 +18,10 @@ module.exports = generators.Base.extend({
     makeProjectDirectoryStructure: function () {
         // 固定入口文件为 `views/${viewName}/index.${html|js}`
         var viewFilePath = 'views/' + this.viewName;
-        this.copy('view.js', viewFilePath + '/index.js');
-        this.template('_view.html', viewFilePath + '/index.html');
+        this.copy('index.js', viewFilePath + '/index.js');
+        this.copy('index.less', viewFilePath + '/index.less');
+        this.template('index.html', viewFilePath + '/index.html');
         // 模拟数据
-        this.template('_view.json', viewFilePath + '/mock-data.json');
+        this.template('backend-data.json', viewFilePath + '/backend-data.json');
     }
 });
